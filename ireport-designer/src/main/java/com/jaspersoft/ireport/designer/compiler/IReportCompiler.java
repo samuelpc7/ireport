@@ -525,7 +525,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 }
                 else
                 {
-                     JasperCompileManager.compileReportToFile(jd, fileName);
+                     JasperCompileManager.getInstance(context).compileToFile(jd, fileName);
                      if (IReportManager.getPreferences().getBoolean("compile_subreports",true))
                      {
                         compileSubreports(jd, reportDirectory, true);
@@ -1471,7 +1471,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 else
                 {
                     try {
-                        JasperCompileManager.compileReportToFile(f.getPath(), jasper);
+                        JasperCompileManager.getInstance(context).compileToFile(f.getPath(), jasper);
                         URL img_url_info = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/information.png");
                          getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_info  +"\"> &nbsp;" +
                             "Subreport " + f.getPath() + " compiled.</font>",true);

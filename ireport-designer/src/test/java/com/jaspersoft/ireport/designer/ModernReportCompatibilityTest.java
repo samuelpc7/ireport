@@ -75,6 +75,27 @@ public class ModernReportCompatibilityTest {
         assertEquals(1, print.getPages().size());
     }
 
+    @Test public void pluginGroovyCompilerProducesPortableReports() throws Exception {
+        String target = System.getProperty("groovy.target.bytecode");
+        String indy = System.getProperty("groovy.target.indy");
+        try {
+            System.setProperty("groovy.target.bytecode", "25");
+            System.setProperty("groovy.target.indy", "true");
+            JasperReport report = new com.jaspersoft.ireport.designer.compiler.PortableGroovyCompiler(
+                new IRLocalJasperReportsContext()).compileReport(load("groovy"));
+            assertEquals("net.sf.jasperreports.compilers.JRGroovyCompiler", report.getCompilerClass());
+            assertEquals("25", System.getProperty("groovy.target.bytecode"));
+            assertEquals("true", System.getProperty("groovy.target.indy"));
+            assertEquals(1, JasperFillManager.fillReport(report, new HashMap<>(), new JREmptyDataSource(3)).getPages().size());
+            Path output = Path.of("target", "compatibility-results");
+            Files.createDirectories(output);
+            net.sf.jasperreports.engine.util.JRSaver.saveObject(report, output.resolve("modern-plugin-groovy.jasper").toFile());
+        } finally {
+            if (target == null) System.clearProperty("groovy.target.bytecode"); else System.setProperty("groovy.target.bytecode", target);
+            if (indy == null) System.clearProperty("groovy.target.indy"); else System.setProperty("groovy.target.indy", indy);
+        }
+    }
+
     @Test public void compiledModernReportConvertsBackToJrxml() throws Exception {
         JasperReport report = JasperCompileManager.compileReport(load("java"));
         ByteArrayOutputStream binary = new ByteArrayOutputStream();

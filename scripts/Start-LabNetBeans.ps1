@@ -10,7 +10,7 @@ $taskRoot = Split-Path $PSScriptRoot -Parent
 $labRoot = Join-Path (Split-Path $taskRoot -Parent) 'laboratorio'
 $profile = Join-Path $labRoot "userdir-$Name"
 if (!(Test-Path -LiteralPath (Join-Path $profile 'config/Modules/com-jaspersoft-ireport.xml'))) { throw 'Stage a fresh profile with New-LabProfile.ps1 first' }
-$arguments = @('--userdir', "`"$profile`"", '--cachedir', "`"$(Join-Path $labRoot "cache-$Name")`"", '--jdkhome', "`"$JavaHome`"", '--nosplash', '-J-Dgroovy.target.bytecode=17', '-J-Dgroovy.target.indy=false', '-J-Djavax.net.ssl.trustStoreType=Windows-ROOT', '-J-Djavax.net.ssl.trustStore=NONE')
+$arguments = @('--userdir', "`"$profile`"", '--cachedir', "`"$(Join-Path $labRoot "cache-$Name")`"", '--jdkhome', "`"$JavaHome`"", '--nosplash', '-J-Djavax.net.ssl.trustStoreType=Windows-ROOT', '-J-Djavax.net.ssl.trustStore=NONE')
 if ($DiagnosticFile) {
     $resolvedDiagnostic = (Resolve-Path -LiteralPath $DiagnosticFile).Path
     $allowedRoot = [IO.Path]::GetFullPath((Split-Path $taskRoot -Parent)) + [IO.Path]::DirectorySeparatorChar

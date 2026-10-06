@@ -8,6 +8,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 public class EngineCompatibilitySmoke {
     public static void main(String[] args) throws Exception {
         Path fixtures = Path.of(args[0]);
+        Path pluginGroovy = fixtures.resolve("modern-plugin-groovy.jasper");
+        if (Files.exists(pluginGroovy)) verify((JasperReport) JRLoader.loadObject(pluginGroovy.toFile()), "plugin-groovy-java17");
         Path groovyTransfer = fixtures.resolve("modern-groovy-transfer.jasper");
         if (Files.exists(groovyTransfer)) verify((JasperReport) JRLoader.loadObject(groovyTransfer.toFile()), "transferred-groovy");
         JasperReport transferred = (JasperReport) JRLoader.loadObject(fixtures.resolve("modern-java.jasper").toFile());

@@ -43,7 +43,7 @@ O teste do motor deriva o classpath do relatório Surefire e exclui as APIs NetB
 
 O staging cria um perfil novo no diretório irmão `laboratorio`, não altera o perfil habitual e rejeita nomes reutilizados. Não use o arquivo NBM diretamente no perfil de produção enquanto os critérios pendentes não estiverem concluídos. O rollback do laboratório consiste em fechar seu IDE e voltar a usar o perfil habitual, que não foi atualizado.
 
-Para compatibilidade dos relatórios Groovy com Java 17/Groovy 3, o lançador aplica `-J-Dgroovy.target.bytecode=17` e `-J-Dgroovy.target.indy=false`. Sem essas opções, um relatório compilado no JDK 25 produziu bytecode 69 e falhou no Java 17; com elas, a transferência e o preenchimento passaram. Abrir o plugin por outro lançador requer as mesmas opções. Isso ainda precisa virar configuração própria do compilador antes de uma distribuição geral.
+O compilador Groovy do fork configura bytecode Java 17 e chamadas clássicas diretamente, sem mudar propriedades da JVM. O relatório compilado mantém a identificação do compilador padrão JasperReports, sem exigir classes do plugin no ERP. Um teste força propriedades globais conflitantes (`25` e `indy=true`), verifica que permanecem intactas e gera um `.jasper` que foi preenchido/exportado em Java 17 com Groovy 3.0.20, sem APIs NetBeans ou classes do fork no destino. O lançador do laboratório deixou de exigir essas flags. O teste independente do motor ainda usa flags para suas compilações locais pelo compilador padrão.
 
 ## Evidências obtidas em 06/10/2026
 
@@ -67,8 +67,8 @@ Os logs completos ficam no diretório pai do fork. O corpus registra resultados 
 - Comparar visualmente relatórios representativos, subrelatórios, imagens, fontes, gráficos, crosstabs e formulários complexos, usando dados sintéticos.
 - Verificar conversão de `.jasper` de versões suportadas e mensagens para arquivos incompatíveis.
 - Validar impressão física em 58/80 mm e A4, margens, corte, paginação e cancelamento. O erro de espaço em branco e rodapé do cupom não foi corrigido nesta migração, pois os relatórios existentes estão fora do escopo.
-- Testar instalação/atualização/desinstalação do NBM em perfil descartável, além do staging direto utilizado até aqui.
-- Auditar dependências e licença, reduzir bibliotecas legadas, configurar compilação Groovy sem exigir flags do lançador, definir versão e política de distribuição.
+- Testar atualização/desinstalação do NBM em perfil descartável. A instalação do primeiro candidato pelo gerenciador do NetBeans 31/JDK 21 passou, usando `Force install into user directory`; o registro está no `update_tracking` do perfil `userdir-nbm-install-nb31-jdk21`.
+- Auditar dependências e licença, reduzir bibliotecas legadas, definir versão e política de distribuição. O compilador adaptado preserva os avisos LGPL do JasperReports; a auditoria completa de distribuição continua pendente.
 - Validar módulos opcionais (JasperServer, Hive e aplicação standalone), que não foram incluídos neste build.
 
 Este NBM é um candidato experimental. Build e regressões automatizadas aprovados não equivalem a homologação para o perfil de produção.
