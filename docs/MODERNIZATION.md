@@ -63,6 +63,12 @@ Os logs completos ficam no diretório pai do fork. O corpus registra resultados 
 
 ## Critérios ainda pendentes para release
 
+### Correção da abertura de Options (06/10/2026)
+
+Foi reproduzida uma falha em Tools → Options → iReport: o carregamento de temas lançava `NotWritablePropertyException` para `JRBaseFont.bold`. O plugin ainda carregava Spring 2.5.6. A dependência foi substituída por `spring-context` 5.3.27, alinhada com Spring core/beans declarados no POM do JasperReports 6.21.4; um import antigo sem uso foi removido. O teste `optionsChartThemesLoadWithModernFonts` carrega os mesmos bundles e exige o tema `eye.candy.sixties`.
+
+Build JDK 21 e clean package JDK 25 passaram em nove testes, incluindo as 215 cópias JRXML. No perfil isolado `options-fixed-nb31-jdk21`, Tools → Options → iReport abriu, assim como Fonts e Compilation and execution, sem a exceção anterior. Nenhuma configuração foi gravada nessas abas durante a validação. A compilação limpa remove arquivos antigos do pacote; instalar em perfil que já possui o candidato anterior ainda precisa de validação de atualização.
+
 - Ampliar os testes de edição e de desfazer/refazer pela interface nos dois JDKs. O exemplo básico foi salvo, fechado, reaberto após reinício e pré-visualizado. O upstream usa `PERSISTENCE_NEVER` para as abas; foi observado aviso sobre descrição MultiView não serializável. Não foi implementada restauração automática de abas.
 - Comparar visualmente relatórios representativos, subrelatórios, imagens, fontes, gráficos, crosstabs e formulários complexos, usando dados sintéticos.
 - Verificar conversão de `.jasper` de versões suportadas e mensagens para arquivos incompatíveis.

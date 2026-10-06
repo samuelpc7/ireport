@@ -35,6 +35,16 @@ public class ModernReportCompatibilityTest {
         return JRXmlLoader.load(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
     }
 
+    @Test public void optionsChartThemesLoadWithModernFonts() {
+        java.util.Set<String> names = new java.util.HashSet<>();
+        for (net.sf.jasperreports.charts.ChartThemeBundle bundle :
+                net.sf.jasperreports.extensions.ExtensionsEnvironment.getExtensionsRegistry()
+                    .getExtensions(net.sf.jasperreports.charts.ChartThemeBundle.class)) {
+            names.addAll(java.util.Arrays.asList(bundle.getChartThemeNames()));
+        }
+        assertTrue("Options must load built-in chart themes", names.contains("eye.candy.sixties"));
+    }
+
     @Test public void modernPropertiesSurviveRoundTrip() throws Exception {
         JasperDesign original = load("java");
         Files.createDirectories(Path.of("target", "compatibility-results"));
