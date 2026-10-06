@@ -1,6 +1,6 @@
 # Isolated runtime candidate
 
-Validated on 2026-10-06 with Java 17. The user requested that ProGuard be handled last. No shrinking result is approved by this validation.
+Initial validation on 2026-10-06 with Java 17. The user requested that ProGuard be handled last. The subsequent designer, layout, signing and shrinking results are recorded in PRODUCTION-READINESS.md; the initial results below retain their original scope.
 
 ## Scope
 

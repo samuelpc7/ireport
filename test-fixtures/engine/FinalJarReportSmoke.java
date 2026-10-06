@@ -49,7 +49,40 @@ public class FinalJarReportSmoke {
     set(branch,"setTitulo","FILIAL TESTE");set(client,"setNomeRazao","CLIENTE TESTE");set(seller,"setNome","VENDEDOR TESTE");
     set(order,"setObjFilial",branch);set(order,"setObjCliente",client);set(order,"setObjVendedor",seller);set(order,"setAcrescimo",0.0);set(order,"setDesconto",0.0);
     p=new HashMap<>();p.put("objPedidoVenda",order);p.put("ProdSemValor",false);p.put("obs_quantidades","");
-    run(root,"Pedido_Venda_SemObs8Cm",p,new JRMapCollectionDataSource(List.of(Map.of("id","1","quantidade_Total",2.0,"preco_Venda",new java.math.BigDecimal("5.00"),"ref","REF","descricao","ITEM TESTE","obs",""))),out);
+    Map<String,Object> row=Map.of("id","1","quantidade_Total",2.0,"preco_Venda",new java.math.BigDecimal("5.00"),"ref","REF","descricao","ITEM TESTE","obs","");
+    run(root,"Pedido_Venda_SemObs8Cm",p,new JRMapCollectionDataSource(List.of(row)),out);
+    if(args.length>2 && args[2].equals("layout")) {
+      for(int count:new int[]{0,1,80}) {
+        List<Map<String,?>> rows=new ArrayList<>();
+        for(int i=0;i<count;i++) {
+          Map<String,Object> extended=new HashMap<>(row);
+          extended.put("descricao","ITEM TESTE "+i+" DESCRICAO LONGA PARA VALIDAR QUEBRA DE LINHA E ACENTUACAO: ação, café, produção, São João.");
+          rows.add(extended);
+        }
+        JasperReport report=(JasperReport)JRLoader.loadObject(root.resolve("Pedido_Venda_SemObs8Cm.jasper").toFile());
+        JasperPrint print=JasperFillManager.fillReport(report,new HashMap<>(p),new JRMapCollectionDataSource(rows));
+        if(count>0 && print.getPages().isEmpty())throw new AssertionError("No layout pages");
+        if(count==80 && print.getPages().size()!=1)throw new AssertionError("Thermal continuous page changed");
+        if(!print.getPages().isEmpty()) {
+          Path pdfPath=out.resolve("sale-layout-"+count+".pdf");
+          JasperExportManager.exportReportToPdfFile(print,pdfPath.toString());
+          try(var pdf=org.apache.pdfbox.pdmodel.PDDocument.load(pdfPath.toFile())) {
+            String text=new org.apache.pdfbox.text.PDFTextStripper().getText(pdf);
+            if(count>0 && (!text.contains("ITEM TESTE 0") || !text.contains("São João")))throw new AssertionError("Lost wrapped text");
+            if(count==80 && !text.contains("ITEM TESTE 79"))throw new AssertionError("Lost final item");
+          }
+        }
+        System.out.println("PASS sale layout rows="+count+" pages="+print.getPages().size());
+        if(count==80) {
+          Map<String,Object> paginated=new HashMap<>(p);
+          paginated.put(JRParameter.IS_IGNORE_PAGINATION,false);
+          JasperPrint paged=JasperFillManager.fillReport(report,paginated,new JRMapCollectionDataSource(rows));
+          if(paged.getPages().size()<2)throw new AssertionError("Explicit pagination did not paginate");
+          JasperExportManager.exportReportToPdfFile(paged,out.resolve("sale-layout-80-paginated.pdf").toString());
+          System.out.println("PASS explicit sale pagination pages="+paged.getPages().size());
+        }
+      }
+    }
   }
   public static class Cash {String d;double v;Cash(String d,double v){this.d=d;this.v=v;}public String getDescricao(){return d;}public Double getValor(){return v;}public String getObs(){return "";}public String getTipo(){return "TESTE";}}
   public static class Action {public String getId(){return "1";}public String getDescricao(){return "ACAO TESTE";}public Double getQuantidade(){return 2.0;}public Double getValor(){return 4.0;}}

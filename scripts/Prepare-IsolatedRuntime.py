@@ -75,7 +75,8 @@ with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED,compresslevel=1) as z:
     for n,data in entries.items(): z.writestr(n,data)
 rules=(erp/'proguard-rules.pro').read_text(encoding='utf-8-sig')
 rules+='\n# Isolated report runtime proposal: preserve dynamic expression access.\n'
-for package in ['groovy.**','org.codehaus.groovy.**','groovyjarjar**','Bean.**','Util.MetodosUteis','Util.MetodosUteis$*','org.apache.pdfbox.**','org.apache.fontbox.**','br.com.java_brasil.**']:
+rules+='-keep class com.lowagie.** { *; }\n'
+for package in ['groovy.**','org.codehaus.groovy.**','groovyjarjar**','Bean.**','Util.MetodosUteis','Util.MetodosUteis$*','org.apache.pdfbox.**','org.apache.fontbox.**','br.com.java_brasil.**','org.hibernate.validator.**','javax.validation.**','org.jboss.logging.**','javax.el.**','com.sun.el.**']:
     rules+='-keep class '+package+' { *; }\n'
 for provider in sorted(set().union(*services.values())):
     if re.fullmatch(r'[\w.$]+',provider): rules+='-keep class '+provider+' { *; }\n'
