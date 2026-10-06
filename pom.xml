@@ -45,7 +45,16 @@
                 <version>3.10.1</version>
                 <configuration>
                     <release>17</release>
+                    <proc>full</proc>
+                    <compilerArgs><arg>-Xmaxerrs</arg><arg>1000</arg></compilerArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>3.6.0</version>
+                <configuration><argLine>--add-opens=java.base/java.net=ALL-UNNAMED -Dgroovy.target.bytecode=17 -Dgroovy.target.indy=false</argLine><systemPropertyVariables>
+                    <netbeans.user>${project.build.directory}/test-userdir</netbeans.user>
+                    <java.util.prefs.userRoot>${project.build.directory}/test-preferences</java.util.prefs.userRoot>
+                </systemPropertyVariables></configuration>
             </plugin>
         </plugins>
     </build>

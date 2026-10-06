@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$true)][string]$JavaHome,
-    [string]$NetBeansVersion = 'RELEASE160',
+    [string]$NetBeansVersion = 'RELEASE310',
     [switch]$WindowsTrust
 )
 $ErrorActionPreference = 'Stop'
