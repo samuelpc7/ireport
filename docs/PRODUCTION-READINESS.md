@@ -13,6 +13,7 @@ The laboratory passes are evidence for the updated designer and isolated report 
 - Synthetic sale data: zero rows gives zero pages (existing template behavior); one long item renders one continuous page; 80 items render one continuous page; explicitly enabling pagination gives eight pages. PDF content checks retain the first/last items and accented text.
 - Offline Sicoob boleto rendering, barcode rendering and PDF merging pass in the full coherent jar.
 - A temporary self-signed laboratory certificate signs the full jar; `jarsigner -verify` succeeds and the signed jar runs all three report parents. Expected self-signed, expiry and timestamp warnings do not constitute production certificate validation. Production keystore and TSA were not used.
+- The final round-3 reduced jar is also signed and verified with the same temporary certificate. Its signed form passes all report/layout data checks and offline boleto/barcode/PDF-merge checks (`small-signed-runtime.log`, `small-signed-boleto.log`, `small-signing-verify.log`).
 - Packaging audit verifies the application Main-Class is preserved, ZIP names are unique, and representative JasperReports, Groovy and OpenPDF classes match official dependencies.
 
 ## Material findings
