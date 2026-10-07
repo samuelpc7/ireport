@@ -2,6 +2,8 @@
 
 ## Decision
 
+Update 2026-10-07: the long-description correction now passes in a separate laboratory copy, including the signed reduced runtime. See SALE-LAYOUT-FIX.md. Original ERP reports remain unchanged; production release gates below still apply. The legacy editor explicitly uses PERSISTENCE_NEVER, so tab restoration is an inherited unsupported behavior, not a newly established regression.
+
 The laboratory passes are evidence for the updated designer and isolated report runtime. They do **not** certify the current delivered ERP jar or physical printing for production. Do not deploy the laboratory ERP jars. No protected ERP file is changed by this task.
 
 ## Confirmed

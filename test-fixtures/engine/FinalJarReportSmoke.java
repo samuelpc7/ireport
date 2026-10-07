@@ -51,7 +51,7 @@ public class FinalJarReportSmoke {
     p=new HashMap<>();p.put("objPedidoVenda",order);p.put("ProdSemValor",false);p.put("obs_quantidades","");
     Map<String,Object> row=Map.of("id","1","quantidade_Total",2.0,"preco_Venda",new java.math.BigDecimal("5.00"),"ref","REF","descricao","ITEM TESTE","obs","");
     run(root,"Pedido_Venda_SemObs8Cm",p,new JRMapCollectionDataSource(List.of(row)),out);
-    if(args.length>2 && args[2].equals("layout")) {
+    if(args.length>2 && args[2].startsWith("layout")) {
       for(int count:new int[]{0,1,80}) {
         List<Map<String,?>> rows=new ArrayList<>();
         for(int i=0;i<count;i++) {
@@ -61,6 +61,7 @@ public class FinalJarReportSmoke {
         }
         JasperReport report=(JasperReport)JRLoader.loadObject(root.resolve("Pedido_Venda_SemObs8Cm.jasper").toFile());
         JasperPrint print=JasperFillManager.fillReport(report,new HashMap<>(p),new JRMapCollectionDataSource(rows));
+        if(args[2].equals("layout-fixed"))checkDescriptionOverlap(print);
         if(count>0 && print.getPages().isEmpty())throw new AssertionError("No layout pages");
         if(count==80 && print.getPages().size()!=1)throw new AssertionError("Thermal continuous page changed");
         if(!print.getPages().isEmpty()) {
@@ -77,9 +78,22 @@ public class FinalJarReportSmoke {
           Map<String,Object> paginated=new HashMap<>(p);
           paginated.put(JRParameter.IS_IGNORE_PAGINATION,false);
           JasperPrint paged=JasperFillManager.fillReport(report,paginated,new JRMapCollectionDataSource(rows));
+          if(args[2].equals("layout-fixed"))checkDescriptionOverlap(paged);
           if(paged.getPages().size()<2)throw new AssertionError("Explicit pagination did not paginate");
           JasperExportManager.exportReportToPdfFile(paged,out.resolve("sale-layout-80-paginated.pdf").toString());
           System.out.println("PASS explicit sale pagination pages="+paged.getPages().size());
+        }
+      }
+    }
+  }
+  static void checkDescriptionOverlap(JasperPrint print) {
+    for(JRPrintPage page:print.getPages()) {
+      for(JRPrintElement element:page.getElements()) {
+        if(!(element instanceof JRPrintText description) || !description.getFullText().startsWith("1-ITEM TESTE"))continue;
+        for(JRPrintElement other:page.getElements()) {
+          if(other instanceof JRPrintText price && price.getFullText().contains("R$")
+              && other.getY()>=element.getY() && other.getY()<element.getY()+element.getHeight())
+            throw new AssertionError("Description overlaps price at y="+other.getY());
         }
       }
     }
