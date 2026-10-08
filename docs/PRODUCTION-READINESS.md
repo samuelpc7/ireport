@@ -2,6 +2,8 @@
 
 ## Decision
 
+Update 2026-10-08: additional autonomous tests passed for Unicode paths, engine failure recovery, controlled designer migration, restart and native preview recovery. Direct overlay on the legacy plugin set failed because of companion module identity requirements and stale XML libraries. Enabling optimization and obfuscation also failed ProGuard preverification because the supplied OLAP hierarchy lacks ANTLR. These configurations are not production-approved; see AUTONOMOUS-VALIDATION.md.
+
 Update 2026-10-07: the long-description correction now passes in a separate laboratory copy, including the signed reduced runtime. See SALE-LAYOUT-FIX.md. Original ERP reports remain unchanged; production release gates below still apply. The legacy editor explicitly uses PERSISTENCE_NEVER, so tab restoration is an inherited unsupported behavior, not a newly established regression.
 
 The laboratory passes are evidence for the updated designer and isolated report runtime. They do **not** certify the current delivered ERP jar or physical printing for production. Do not deploy the laboratory ERP jars. No protected ERP file is changed by this task.
