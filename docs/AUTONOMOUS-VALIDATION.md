@@ -2,6 +2,8 @@
 
 Atualização posterior: a migração seletiva e a correção do provedor XML passam; a atribuição inicial da falha apenas a bibliotecas antigas foi incompleta. O problema foi reproduzido com Woodstox atual. Resultados e candidato atualizado estão em SELECTIVE-MIGRATION-VALIDATION.md. O histórico das tentativas abaixo foi mantido para rastreabilidade.
 
+O experimento ProGuard 03 também passou após completar a análise ANTLR e preservar APIs XML: seis grupos offline no JAR otimizado/ofuscado e os mesmos seis na cópia assinada com certificado temporário. Ver OBFUSCATION-VALIDATION.md para resultados e limites; a reprovação histórica abaixo se refere ao primeiro experimento.
+
 Os testes usam o NBM e o build isolado validados em 2026-10-07. Nenhum comando deste trabalho altera o ERP original. Dados de conexão do usuário não foram copiados: o perfil usa preferências sintéticas e Empty datasource.
 
 ## Resultados confirmados

@@ -10,6 +10,7 @@ O POM do designer agora exclui Woodstox das duas origens transitivas, JasperRepo
 
 - Java 21 e Java 25: **12 testes, zero falhas, zero erros, zero ignorados**. O teste de corpus carrega e reconverte XML de 215 JRXMLs da cópia do laboratório; a compilação efetiva desses relatórios está documentada separadamente em SOURCE-BUILD-VALIDATION.md.
 - Interface nativa: editor visual, compilação/preview com três códigos de barras e Tools > Options > iReport passam. Groovy e cm aparecem na interface; as cinco preferências sintéticas continuam no arquivo após encerramento normal.
+- Reinicialização do mesmo perfil com Java 25: editor visual e recompilação/preview passam; log sem SEVERE em `selective-jdk-stax-native25.log`.
 - Log nativo: sem SEVERE e sem erro Woodstox. Outros avisos de APIs antigas do NetBeans permanecem.
 - NBM: 2626 classes idênticas às usadas no perfil nativo, bytecode máximo Java 17; 91 JARs auxiliares idênticos; PDFBox permanece somente nos testes.
 - SHA-256 do NBM: `8eacb06ec7d49b816a7dd6a0d5fc6c255c9255e94d0054d1e30d948a4d994119`.

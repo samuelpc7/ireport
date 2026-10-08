@@ -2,6 +2,8 @@
 
 ## Decision
 
+Latest ProGuard update 2026-10-08: experiment 03 completes optimization/obfuscation and passes six offline runtime groups, including all 215 packaged binaries, subreports, barcodes and failure recovery. ANTLR analysis input and platform XML API keep rules resolve the previous failures. This approves the exercised report paths, not the entire obfuscated ERP; see OBFUSCATION-VALIDATION.md.
+
 Latest designer update 2026-10-08: selective migration now preserves 174 unrelated files and native editor/preview/Options pass. The XML provider failure was reproduced with current Woodstox as well; excluding its transitive service provider resolves the NetBeans SVG loader conflict. Java 21/25 each pass 12 tests without skips. The new NBM has 91 extension libraries and SHA-256 `8eacb06ec7d49b816a7dd6a0d5fc6c255c9255e94d0054d1e30d948a4d994119`. See SELECTIVE-MIGRATION-VALIDATION.md. Legacy companion modules remain quarantined and unsupported by this validation.
 
 Update 2026-10-08: additional autonomous tests passed for Unicode paths, engine failure recovery, controlled designer migration, restart and native preview recovery. Direct overlay on the legacy plugin set failed because of companion module identity requirements and stale XML libraries. Enabling optimization and obfuscation also failed ProGuard preverification because the supplied OLAP hierarchy lacks ANTLR. These configurations are not production-approved; see AUTONOMOUS-VALIDATION.md.
