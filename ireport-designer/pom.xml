@@ -912,6 +912,14 @@
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>6.21.4</version>
+            <exclusions>
+                <!-- Its global StAX service leaks into unrelated NetBeans modules,
+                     whose loaders cannot load this private provider. Use JDK StAX. -->
+                <exclusion>
+                    <groupId>com.fasterxml.woodstox</groupId>
+                    <artifactId>woodstox-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- strangely this version was named 5.6.0 within the dependencies --> 
         <dependency>
@@ -1158,6 +1166,12 @@
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-ri</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.woodstox</groupId>
+                    <artifactId>woodstox-core</artifactId>
+                </exclusion>
+            </exclusions>
             <version>2.3.5</version>
             <type>pom</type>
         </dependency>

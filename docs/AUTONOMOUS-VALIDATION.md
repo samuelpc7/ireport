@@ -1,5 +1,7 @@
 # Testes autônomos adicionais — 2026-10-08
 
+Atualização posterior: a migração seletiva e a correção do provedor XML passam; a atribuição inicial da falha apenas a bibliotecas antigas foi incompleta. O problema foi reproduzido com Woodstox atual. Resultados e candidato atualizado estão em SELECTIVE-MIGRATION-VALIDATION.md. O histórico das tentativas abaixo foi mantido para rastreabilidade.
+
 Os testes usam o NBM e o build isolado validados em 2026-10-07. Nenhum comando deste trabalho altera o ERP original. Dados de conexão do usuário não foram copiados: o perfil usa preferências sintéticas e Empty datasource.
 
 ## Resultados confirmados

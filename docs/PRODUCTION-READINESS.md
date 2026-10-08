@@ -2,6 +2,8 @@
 
 ## Decision
 
+Latest designer update 2026-10-08: selective migration now preserves 174 unrelated files and native editor/preview/Options pass. The XML provider failure was reproduced with current Woodstox as well; excluding its transitive service provider resolves the NetBeans SVG loader conflict. Java 21/25 each pass 12 tests without skips. The new NBM has 91 extension libraries and SHA-256 `8eacb06ec7d49b816a7dd6a0d5fc6c255c9255e94d0054d1e30d948a4d994119`. See SELECTIVE-MIGRATION-VALIDATION.md. Legacy companion modules remain quarantined and unsupported by this validation.
+
 Update 2026-10-08: additional autonomous tests passed for Unicode paths, engine failure recovery, controlled designer migration, restart and native preview recovery. Direct overlay on the legacy plugin set failed because of companion module identity requirements and stale XML libraries. Enabling optimization and obfuscation also failed ProGuard preverification because the supplied OLAP hierarchy lacks ANTLR. These configurations are not production-approved; see AUTONOMOUS-VALIDATION.md.
 
 Update 2026-10-07: the long-description correction now passes in a separate laboratory copy, including the signed reduced runtime. See SALE-LAYOUT-FIX.md. Original ERP reports remain unchanged; production release gates below still apply. The legacy editor explicitly uses PERSISTENCE_NEVER, so tab restoration is an inherited unsupported behavior, not a newly established regression.

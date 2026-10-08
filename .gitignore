@@ -8,3 +8,4 @@
 /MongoDb/target/
 **/target/
 .lab/
+__pycache__/

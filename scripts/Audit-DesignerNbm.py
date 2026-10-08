@@ -1,11 +1,16 @@
 """Audit optional report libraries and compare module classes to the native test profile."""
 from pathlib import Path
-import hashlib, io, json, zipfile
+import argparse, hashlib, io, json, zipfile
 
 fork=Path(__file__).resolve().parents[1]
 lab=fork.parent/'laboratorio'
-path=fork/'ireport-designer/target/ireport-designer-6.0-SNAPSHOT.nbm'
-profile=lab/'userdir-svg-validation-nb31-jdk21'
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--nbm',type=Path,default=fork/'ireport-designer/target/ireport-designer-6.0-SNAPSHOT.nbm')
+parser.add_argument('--profile',type=Path,default=lab/'userdir-svg-validation-nb31-jdk21')
+parser.add_argument('--output',type=Path,default=lab/'designer-svg-native-01/nbm-audit.json')
+args=parser.parse_args()
+path=args.nbm
+profile=args.profile
 with zipfile.ZipFile(path) as nbm:
     names=nbm.namelist()
     required=['batik-bridge.jar','batik-svggen.jar','core.jar','javase.jar']
@@ -28,5 +33,5 @@ result={'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
         'native_tested_module_classes_identical':len(classes),
         'native_tested_extension_jars_identical':len(ext),
         'module_bytecode_maximum':'Java 17'}
-(lab/'designer-svg-native-01/nbm-audit.json').write_text(json.dumps(result,indent=2))
+args.output.write_text(json.dumps(result,indent=2))
 print(json.dumps(result,indent=2))

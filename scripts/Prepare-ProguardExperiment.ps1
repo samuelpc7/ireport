@@ -1,16 +1,25 @@
-param([Parameter(Mandatory=$true)][string]$Destination)
+param([Parameter(Mandatory=$true)][string]$Destination, [string[]]$AnalysisLibraries = @())
 $ErrorActionPreference = 'Stop'
 $fork = Split-Path $PSScriptRoot -Parent
 $lab = [IO.Path]::GetFullPath((Join-Path (Split-Path $fork -Parent) 'laboratorio'))
 $destinationPath = [IO.Path]::GetFullPath($Destination)
 if (!$destinationPath.StartsWith($lab + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Experiment must stay within the laboratory' }
 if (Test-Path -LiteralPath $destinationPath) { throw 'Use a fresh experiment directory' }
+foreach ($library in $AnalysisLibraries) {
+    if (!(Test-Path -LiteralPath $library -PathType Leaf)) { throw "Missing analysis library: $library" }
+}
 $source = Join-Path $lab 'erp-build-01'
 New-Item -ItemType Directory -Path "$destinationPath/target" -Force | Out-Null
 Copy-Item -LiteralPath "$source/target/AtheneSistema.jar" -Destination "$destinationPath/target/AtheneSistema.jar"
 $rules = Get-Content -LiteralPath "$source/proguard-rules.pro" -Raw
 $rules = $rules -replace '(?m)^-dontobfuscate\s*$','' -replace '(?m)^-dontoptimize\s*$',''
 $rules += "`n-useuniqueclassmembernames`n-dontusemixedcaseclassnames`n-optimizationpasses 1`n-printmapping $($destinationPath.Replace('\','/'))/mapping.txt`n"
+# Some old fat-JAR dependencies bundle JAXP API classes also provided by java.xml.
+# JVM parent-first loading uses the platform definitions; their names must match.
+$rules += "`n-keep class javax.xml.** { *; }`n-keep class org.w3c.dom.** { *; }`n-keep class org.xml.sax.** { *; }`n"
+foreach ($library in $AnalysisLibraries) {
+    $rules += "`n-libraryjars '$([IO.Path]::GetFullPath($library).Replace('\','/'))'`n"
+}
 Set-Content -LiteralPath "$destinationPath/proguard-rules.pro" -Value $rules -Encoding utf8
 [xml]$pom = Get-Content -LiteralPath "$source/pom.xml" -Raw
 $ns = [System.Xml.XmlNamespaceManager]::new($pom.NameTable)
