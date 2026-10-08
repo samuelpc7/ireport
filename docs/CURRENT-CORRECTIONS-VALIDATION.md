@@ -24,6 +24,10 @@ O completo assinado com certificado temporário exclusivo do laboratório passa 
 | --- | ---: | --- |
 | Completo | 261371152 | fdddef2e01011d34dc8e879496c11b3e75c2253073e99d06d14f3205076d9a19 |
 | Completo assinado temporariamente | 271558344 | 6453d4362906dff9d3f7698d9eb840033fe03375261a468388d2d43ba6942b6e |
+| Otimizado e ofuscado | 182830836 | 60a206858b2945e38fe7cab1eac852cfc80b3b1e3c39f164b2296746994fcb55 |
+| Otimizado/ofuscado assinado temporariamente | 188377587 | 0a866b0936f103f5ca467b10113dd09a960fde747ba7ea597bd99ea48f57c671 |
+
+Experimento proguard-current-04 concluído em 8min27s: ProGuard 7.6.0 com otimização e ofuscação efetivas. O mapping confirma 22.851 classes renomeadas e nenhuma das APIs XML preservadas renomeada. O reduzido passa nos mesmos seis grupos, antes e depois da assinatura temporária; a verificação básica da assinatura também passa. Portanto os quatro artefatos desta rodada passam nos caminhos de relatório exercitados. Isso não certifica todas as funções da aplicação ofuscada.
 
 ## Limites da entrega
 

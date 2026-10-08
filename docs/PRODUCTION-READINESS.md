@@ -2,6 +2,8 @@
 
 ## Decision
 
+Latest corrected laboratory build 2026-10-08: current copied sources compile 215 reports and pass 30 offline unit tests. Full and optimized/obfuscated JARs each pass six runtime groups, unsigned and temporarily signed. A forked compiler with the complete application classpath resolves a Groovy expression that the old Maven compiler silently emitted incorrectly. Relevant ERP originals remain unchanged; applying these proposals and resolving the production signing certificate remain pending. See CURRENT-CORRECTIONS-VALIDATION.md. The audited designer NBM with 91 dependencies is published as RC1; see BINARY-DISTRIBUTION.md.
+
 Latest delivery check 2026-10-08: copies of the current ERP full/small JARs fail release gates for missing Barcode4J, reduced Groovy/reflection dependencies, boletoA4 expression and strict signature verification (certificate ExtendedKeyUsage disallows code signing). The isolated candidate's direct Jasper print exports pass spool submission, and offline migration rollback restores 315 files exactly. Physical width and barcode/QR readings were confirmed by the user for previous PDF prints. These results do not approve the current ERP delivery; see CURRENT-DELIVERY-VALIDATION.md.
 
 Latest ProGuard update 2026-10-08: experiment 03 completes optimization/obfuscation and passes six offline runtime groups, including all 215 packaged binaries, subreports, barcodes and failure recovery. ANTLR analysis input and platform XML API keep rules resolve the previous failures. This approves the exercised report paths, not the entire obfuscated ERP; see OBFUSCATION-VALIDATION.md.

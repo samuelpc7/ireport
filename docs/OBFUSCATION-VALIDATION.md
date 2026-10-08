@@ -1,5 +1,7 @@
 # Otimização e ofuscação isoladas — 2026-10-08
 
+Atualização: o experimento proguard-current-04 usa a cópia atual corrigida, conclui em 8min27s e passa nos seis grupos de runtime antes/depois da assinatura temporária. Renomeia 22.851 classes sem renomear APIs XML preservadas. Veja CURRENT-CORRECTIONS-VALIDATION.md para hashes e a correção adicional da compilação dos relatórios. Os resultados abaixo continuam como histórico do experimento anterior.
+
 O terceiro experimento ProGuard 7.6.0 passou no build e nos seis grupos de execução offline, com Java 17. Usa o JAR do build isolado de 2026-10-07; não modifica o ERP original nem certifica alterações posteriores nele.
 
 ## Correções necessárias
