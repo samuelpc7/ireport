@@ -46,6 +46,7 @@ with zipfile.ZipFile(args.nbm) as nbm:
 assert len(inventory) == 91, 'Unexpected dependency inventory; audit the candidate again'
 (out / 'dependencies.json').write_text(json.dumps(inventory, indent=2), encoding='utf-8')
 shutil.copy2(fork / 'docs/BINARY-DISTRIBUTION.md', out / 'INSTALL.md')
+shutil.copy2(fork / 'COPYING', out / 'COPYING')
 shutil.copy2(fork.parent / 'laboratorio/artifacts-production-candidate/release-audit.json', out / 'release-audit.json')
 (out / 'NOTICE.md').write_text('''The project POM declares AGPL-3.0. Corresponding modified source is supplied in the release source archive and tagged Git repository.
 

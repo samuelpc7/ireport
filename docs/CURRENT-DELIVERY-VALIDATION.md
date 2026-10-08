@@ -29,7 +29,7 @@ Diagnóstico separado: acrescentando somente `barcode4j-2.1.jar` ao classpath do
 
 ## Impressão direta e reversão
 
-No candidato isolado otimizado/ofuscado e assinado temporariamente, foram preenchidos relatórios com dados sintéticos e enviados diretamente por `JRPrintServiceExporter`, usando configuração de serviço e diálogos desabilitados, como na API usada pelo ERP. Dois cupons, 60/80 mm, foram para Daruma; caixa A4 foi para Epson. Os três exports passam e os trabalhos são aceitos pelo spooler. **Não é um teste ponta a ponta pela tela do ERP; falta conferência física destes novos exemplares.** Nenhum PDF intermediário foi usado na impressão direta.
+No candidato isolado otimizado/ofuscado e assinado temporariamente, foram preenchidos relatórios com dados sintéticos e enviados diretamente por `JRPrintServiceExporter`, usando configuração de serviço e diálogos desabilitados, como na API usada pelo ERP. Dois cupons, 60/80 mm, foram para Daruma; caixa A4 foi para Epson. Os três exports passam e os trabalhos são aceitos pelo spooler. As fotos enviadas pelo usuário foram conferidas sem corte aparente do conteúdo ou regressão do rodapé de paginação. **Não é um teste ponta a ponta pela tela do ERP.** Nenhum PDF intermediário foi usado na impressão direta.
 
 Uma cópia descartável do perfil legado passou por migração seletiva e reversão offline. Os 315 arquivos iniciais foram restaurados byte a byte, incluindo os outros módulos e preferências. Isso valida a reversão dos arquivos, não a execução dos complementos antigos no NetBeans atual. O perfil diário não foi alterado.
 
