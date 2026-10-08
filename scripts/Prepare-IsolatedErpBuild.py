@@ -1,10 +1,15 @@
 """Prepare a sanitized source build experiment; ERP inputs are read only."""
 from pathlib import Path
-import hashlib, json, shutil, xml.etree.ElementTree as ET
+import argparse, hashlib, json, shutil, xml.etree.ElementTree as ET
 
 base = Path(__file__).resolve().parents[2]
 erp = base.parent / 'AtheneSistema'
-lab = base / 'laboratorio/erp-build-01'
+parser = argparse.ArgumentParser()
+parser.add_argument('--destination', default=str(base / 'laboratorio/erp-build-01'))
+args = parser.parse_args()
+lab = Path(args.destination).resolve()
+if not lab.is_relative_to((base / 'laboratorio').resolve()):
+    raise SystemExit('Destination must stay within the laboratory')
 if lab.exists():
     raise SystemExit('Refusing to overwrite existing laboratory build')
 lab.mkdir()

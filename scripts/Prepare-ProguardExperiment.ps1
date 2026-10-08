@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Destination, [string[]]$AnalysisLibraries = @())
+param([Parameter(Mandatory=$true)][string]$Destination, [string[]]$AnalysisLibraries = @(), [string]$SourceBuild = '')
 $ErrorActionPreference = 'Stop'
 $fork = Split-Path $PSScriptRoot -Parent
 $lab = [IO.Path]::GetFullPath((Join-Path (Split-Path $fork -Parent) 'laboratorio'))
@@ -8,7 +8,9 @@ if (Test-Path -LiteralPath $destinationPath) { throw 'Use a fresh experiment dir
 foreach ($library in $AnalysisLibraries) {
     if (!(Test-Path -LiteralPath $library -PathType Leaf)) { throw "Missing analysis library: $library" }
 }
-$source = Join-Path $lab 'erp-build-01'
+if (!$SourceBuild) { $SourceBuild = Join-Path $lab 'erp-build-01' }
+$source = [IO.Path]::GetFullPath($SourceBuild)
+if (!$source.StartsWith($lab + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Source build must stay within laboratory' }
 New-Item -ItemType Directory -Path "$destinationPath/target" -Force | Out-Null
 Copy-Item -LiteralPath "$source/target/AtheneSistema.jar" -Destination "$destinationPath/target/AtheneSistema.jar"
 $rules = Get-Content -LiteralPath "$source/proguard-rules.pro" -Raw

@@ -1,5 +1,6 @@
 param([Parameter(Mandatory=$true)][string]$Artifact,
-      [Parameter(Mandatory=$true)][string]$EvidenceDirectory)
+      [Parameter(Mandatory=$true)][string]$EvidenceDirectory,
+      [string]$SourceBuild = '')
 $ErrorActionPreference = 'Stop'
 $fork = Split-Path $PSScriptRoot -Parent
 $lab = [IO.Path]::GetFullPath((Join-Path (Split-Path $fork -Parent) 'laboratorio'))
@@ -13,7 +14,10 @@ if (!(Test-Path -LiteralPath $artifactPath -PathType Leaf)) { throw 'Artifact mi
 New-Item -ItemType Directory -Path "$evidence/classes" -Force | Out-Null
 $java = 'C:/Program Files/Java/jdk-17/bin/java.exe'
 $javac = 'C:/Program Files/Java/jdk-17/bin/javac.exe'
-$baseline = Join-Path $lab 'erp-build-01/target/AtheneSistema.jar'
+if (!$SourceBuild) { $SourceBuild = Join-Path $lab 'erp-build-01' }
+$SourceBuild = [IO.Path]::GetFullPath($SourceBuild)
+if (!$SourceBuild.StartsWith($lab + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Source build must stay within laboratory' }
+$baseline = Join-Path $SourceBuild 'target/AtheneSistema.jar'
 $fixtures = Join-Path $fork 'test-fixtures/engine'
 $names = @('FinalJarReportSmoke','BoletoRuntimeSmoke','PackagedReportsAudit','BarcodeComponentsSmoke','FailureRecoverySmoke')
 $sources = @($names | ForEach-Object { Join-Path $fixtures "$_.java" })
@@ -29,7 +33,7 @@ function Invoke-Check([string]$Name, [string[]]$Arguments, [string]$WorkingDirec
     Get-Content "$evidence/$Name.log" -Tail 5
     if ($code -ne 0) { throw "$Name failed; see evidence log" }
 }
-$reports = Join-Path $lab 'erp-build-01/target/classes/Reports'
+$reports = Join-Path $SourceBuild 'target/classes/Reports'
 Invoke-Check 'packaged-reports' @('PackagedReportsAudit', $artifactPath, $reports) $evidence
 Invoke-Check 'runtime' @('FinalJarReportSmoke', $reports, "$evidence/pdf", 'layout-fixed') $reports
 Invoke-Check 'boleto' @('BoletoRuntimeSmoke', "$evidence/boleto-pdf", 'source-build') $evidence
